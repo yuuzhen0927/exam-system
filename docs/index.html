@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在线题库学习考试系统 - 产品介绍</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<style>
+:root{--pri:#4f6ef7;--pri-d:#3b5bdb;--acc:#06b6d4;--grn:#10b981;--org:#f59e0b;--red:#ef4444;--pur:#8b5cf6;--bg:#f8fafc;--card:#fff;--txt:#1e293b;--txt2:#64748b;--bdr:#e2e8f0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;overflow-x:hidden}
+a{color:var(--pri);text-decoration:none}
+
+/* ===== NAV ===== */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);transition:box-shadow .3s}
+.topnav.scrolled{box-shadow:0 2px 16px rgba(0,0,0,0.06)}
+.topnav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--txt)}
+.nav-logo-icon{width:32px;height:32px;border-radius:8px;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:14px;color:var(--txt2);font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--pri)}
+.nav-cta{background:var(--pri);color:#fff!important;padding:8px 20px;border-radius:8px;font-weight:600;transition:all .2s}
+.nav-cta:hover{background:var(--pri-d);transform:translateY(-1px);box-shadow:0 4px 12px rgba(79,110,247,0.3)}
+
+/* ===== HERO ===== */
+.hero{padding:120px 24px 80px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0f172a 0%,#1e293b 40%,#334155 100%);color:#fff}
+.hero::before{content:'';position:absolute;top:-30%;left:-20%;width:140%;height:160%;background:radial-gradient(circle at 25% 40%,rgba(79,110,247,0.18) 0%,transparent 55%),radial-gradient(circle at 75% 70%,rgba(6,182,212,0.12) 0%,transparent 50%);animation:heroPulse 25s ease-in-out infinite}
+@keyframes heroPulse{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-3%,-2%) scale(1.02)}}
+.hero-content{position:relative;z-index:1;max-width:860px;margin:0 auto}
+.hero-badge{display:inline-block;background:rgba(79,110,247,0.2);border:1px solid rgba(79,110,247,0.35);border-radius:24px;padding:6px 22px;font-size:13px;color:#a5b4fc;margin-bottom:28px;letter-spacing:0.02em}
+.hero h1{font-size:clamp(32px,5vw,52px);font-weight:800;margin-bottom:20px;letter-spacing:-1.5px;line-height:1.2}
+.hero h1 span{background:linear-gradient(135deg,#818cf8,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:clamp(15px,2vw,19px);color:#94a3b8;max-width:640px;margin:0 auto 40px;line-height:1.7}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .25s;text-decoration:none}
+.btn-pri{background:var(--pri);color:#fff}
+.btn-pri:hover{background:var(--pri-d);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,110,247,0.35)}
+.btn-ghost{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.btn-ghost:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4)}
+
+/* Stats */
+.hero-stats{display:flex;justify-content:center;gap:56px;margin-top:56px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-size:36px;font-weight:800;display:block;background:linear-gradient(135deg,#818cf8,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat-label{font-size:13px;color:#64748b}
+
+/* ===== SECTIONS ===== */
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+.section{padding:80px 0}
+.section-hd{text-align:center;margin-bottom:56px}
+.section-hd h2{font-size:clamp(24px,3.5vw,32px);font-weight:800;margin-bottom:12px;letter-spacing:-0.5px}
+.section-hd p{color:var(--txt2);font-size:15px;max-width:560px;margin:0 auto}
+
+/* ===== FEATURE CARDS ===== */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.feat-card{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:32px;transition:all .3s;position:relative;overflow:hidden}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.08)}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .3s}
+.feat-card:hover::before{opacity:1}
+.feat-card:nth-child(1)::before{background:linear-gradient(90deg,#4f6ef7,#06b6d4)}
+.feat-card:nth-child(2)::before{background:linear-gradient(90deg,#ef4444,#f59e0b)}
+.feat-card:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#06b6d4)}
+.feat-card:nth-child(4)::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.feat-card:nth-child(5)::before{background:linear-gradient(90deg,#06b6d4,#4f6ef7)}
+.feat-card:nth-child(6)::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.feat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.feat-card h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.feat-card p{font-size:14px;color:var(--txt2);line-height:1.75}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.feat-tag{background:#f1f5f9;color:var(--txt2);border-radius:6px;padding:3px 10px;font-size:12px;font-weight:500}
+
+/* ===== DUAL PANEL (User + Admin) ===== */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:0}
+.panel{background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:36px;position:relative}
+.panel-hd{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.panel-hd .panel-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.panel-hd h3{font-size:20px;font-weight:700}
+.panel-desc{color:var(--txt2);font-size:14px;margin-bottom:24px}
+.panel-list{list-style:none}
+.panel-list li{padding:12px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px;font-size:14px;line-height:1.6}
+.panel-list li:last-child{border-bottom:none}
+.panel-list .pl-icon{font-size:16px;flex-shrink:0;margin-top:3px}
+.panel-list b{color:var(--txt)}
+
+/* ===== HIGHLIGHT GRID ===== */
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.hl-card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:24px 18px;text-align:center;transition:all .25s}
+.hl-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.hl-emoji{font-size:32px;margin-bottom:10px}
+.hl-card h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.hl-card p{font-size:12px;color:var(--txt2);line-height:1.5}
+
+/* ===== TECH GRID ===== */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.tech-item{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:24px 16px;text-align:center}
+.tech-item .ti-icon{font-size:28px;margin-bottom:8px}
+.tech-item h4{font-size:13px;color:var(--txt2);font-weight:600;margin-bottom:2px}
+.tech-item span{font-size:15px;font-weight:700}
+
+/* ===== SCENE GRID ===== */
+.scene-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.scene-card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:28px 20px;text-align:center;transition:all .25s}
+.scene-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.scene-card .sc-icon{font-size:36px;margin-bottom:12px}
+.scene-card h4{font-size:16px;font-weight:700;margin-bottom:6px}
+.scene-card p{font-size:13px;color:var(--txt2);line-height:1.5}
+
+/* ===== SECURITY ===== */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.sec-card{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:28px;display:flex;gap:16px;align-items:flex-start}
+.sec-card .sec-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sec-card h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.sec-card p{font-size:13px;color:var(--txt2);line-height:1.5}
+
+/* ===== DEMO ===== */
+.demo-section{background:linear-gradient(135deg,var(--pri),var(--acc));border-radius:20px;padding:56px 36px;text-align:center;color:#fff;margin:0 24px}
+.demo-section h2{font-size:28px;font-weight:700;margin-bottom:8px}
+.demo-section p{opacity:0.9;margin-bottom:32px;font-size:15px}
+.demo-table{width:100%;max-width:700px;margin:0 auto;border-collapse:collapse;background:rgba(255,255,255,0.12);border-radius:12px;overflow:hidden;backdrop-filter:blur(8px)}
+.demo-table th,.demo-table td{padding:14px 20px;text-align:left;font-size:14px}
+.demo-table th{background:rgba(255,255,255,0.1);font-weight:600;font-size:13px}
+.demo-table td{border-top:1px solid rgba(255,255,255,0.08)}
+.demo-table code{background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;font-size:13px}
+.demo-role{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.demo-role.admin{background:rgba(239,68,68,0.3);color:#fca5a5}
+.demo-role.student{background:rgba(16,185,129,0.3);color:#6ee7b7}
+
+/* ===== CTA ===== */
+.cta-section{text-align:center;padding:80px 24px}
+.cta-section h2{font-size:clamp(24px,3.5vw,32px);font-weight:800;margin-bottom:12px}
+.cta-section p{color:var(--txt2);font-size:15px;margin-bottom:32px}
+
+/* ===== FOOTER ===== */
+footer{text-align:center;padding:32px 24px;color:var(--txt2);font-size:13px;border-top:1px solid var(--bdr)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero{padding:100px 20px 60px}
+  .hero h1{font-size:28px}
+  .hero-stats{gap:24px}
+  .hero-stat-num{font-size:28px}
+  .section{padding:48px 0}
+  .feat-grid{grid-template-columns:1fr}
+  .dual{grid-template-columns:1fr}
+  .hl-grid{grid-template-columns:repeat(2,1fr)}
+  .sec-grid{grid-template-columns:1fr}
+  .demo-section{margin:0 16px;padding:36px 20px;border-radius:16px}
+  .demo-table th,.demo-table td{padding:10px 12px;font-size:13px}
+  .scene-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0f172a;--card:#1e293b;--txt:#e2e8f0;--txt2:#94a3b8;--bdr:#334155}
+  .topnav{background:rgba(15,23,42,0.85)}
+  .feat-card:hover{box-shadow:0 16px 40px rgba(0,0,0,0.3)}
+  .hl-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <div class="nav-logo"><div class="nav-logo-icon">K</div>在线题库考试系统</div>
+    <div class="nav-links">
+      <a href="#features">核心功能</a>
+      <a href="#users">学员端</a>
+      <a href="#admins">管理端</a>
+      <a href="#security">安全</a>
+      <a href="#tech">技术</a>
+      
+      <a href="https://office-stuck-person-terminals.trycloudflare.com" class="nav-cta">进入系统</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">一体化在线题库学习考试平台</div>
+    <h1>在线题库学习<span>考试系统</span></h1>
+    <p>面向建筑检测、职业培训、企业内训等场景，整合在线练习、模拟/正式考试、视频课程、证书颁发等核心能力，支持 PC 和移动端，开箱即用。</p>
+    <div class="hero-btns">
+      <a href="https://office-stuck-person-terminals.trycloudflare.com" class="btn btn-pri">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        立即体验
+      </a>
+      <a href="#features" class="btn btn-ghost">了解更多</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-num">30+</span><span class="hero-stat-label">功能模块</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">4</span><span class="hero-stat-label">题型支持</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">100%</span><span class="hero-stat-label">多端适配</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">24/7</span><span class="hero-stat-label">安全运行</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-hd"><h2>核心特色</h2><p>从练习到考试、从学习到颁证，覆盖完整学习链路</p></div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#eff6ff;color:#3b82f6">📝</div>
+        <h3>智能练习</h3>
+        <p>按科目、章节、难度自由组题，答错自动入错题本。支持错题重做、"已掌握"标记、加强掌握批量练习模式，综合题智能相似度评判。</p>
+        <div class="feat-tags"><span class="feat-tag">单选</span><span class="feat-tag">多选</span><span class="feat-tag">判断</span><span class="feat-tag">简答</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#fef2f2;color:#ef4444">🛡️</div>
+        <h3>仿真考试</h3>
+        <p>正式考试模拟真实考场：全程倒计时、防切屏监控、页面离开检测、异常自动记录、超时强制交卷，支持邀请码进入。</p>
+        <div class="feat-tags"><span class="feat-tag">防作弊</span><span class="feat-tag">自动交卷</span><span class="feat-tag">邀请码</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#ecfdf5;color:#10b981">🏆</div>
+        <h3>双证体系</h3>
+        <p>练习证书：章节正确率达标即可申请。考试证书：正式考试通过自动颁发，未自动颁发时可手动申请，系统校验成绩。</p>
+        <div class="feat-tags"><span class="feat-tag">练习证书</span><span class="feat-tag">考试证书</span><span class="feat-tag">在线申请</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#fefce8;color:#f59e0b">⚡</div>
+        <h3>自动+人工批改</h3>
+        <p>客观题交卷即出分；含综合简答题的试卷支持管理员在线人工批改，提供全部满分与关键词匹配快速评分。</p>
+        <div class="feat-tags"><span class="feat-tag">即时出分</span><span class="feat-tag">人工批改</span><span class="feat-tag">关键词匹配</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#f0f9ff;color:#06b6d4">📱</div>
+        <h3>多端适配</h3>
+        <p>PC、手机、微信浏览器全页面自适应，支持深色/浅色主题一键切换，移动端触屏操作优化。</p>
+        <div class="feat-tags"><span class="feat-tag">PC</span><span class="feat-tag">移动端</span><span class="feat-tag">深色模式</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#faf5ff;color:#8b5cf6">🔍</div>
+        <h3>全局搜索</h3>
+        <p>Ctrl+K 一键搜索题目、资料、公告，支持模糊匹配，快速定位所需内容，提升管理效率。</p>
+        <div class="feat-tags"><span class="feat-tag">Ctrl+K</span><span class="feat-tag">模糊匹配</span><span class="feat-tag">全局</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER + ADMIN -->
+<section class="section" id="users" style="background:var(--card);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)">
+  <div class="container">
+    <div class="section-hd"><h2>学员端 + 管理后台</h2><p>双端协作，覆盖完整教学考试场景</p></div>
+    <div class="dual">
+      <!-- 学员端 -->
+      <div class="panel" id="admins">
+        <div class="panel-hd"><div class="panel-icon" style="background:#eff6ff;color:#3b82f6">🎓</div><h3>学员端功能</h3></div>
+        <div class="panel-desc">为学员提供完整的学习备考体验</div>
+        <ul class="panel-list">
+          <li><span class="pl-icon">📝</span><div><b>练习中心</b> — 按科目/章节/难度筛选，答错自动入错题本，支持加强掌握批量练习</div></li>
+          <li><span class="pl-icon">📋</span><div><b>考试管理</b> — 模拟考试可重做；正式考试有防作弊，支持邀请码试卷</div></li>
+          <li><span class="pl-icon">📈</span><div><b>我的成绩</b> — 全部考试记录，支持搜索，点击回看试卷详情</div></li>
+          <li><span class="pl-icon">❌</span><div><b>错题本</b> — 自动收集错题，复习模式重做，答对标记已掌握</div></li>
+          <li><span class="pl-icon">⭐</span><div><b>收藏夹</b> — 标记重点题目，分类查看，支持重新做题</div></li>
+          <li><span class="pl-icon">📓</span><div><b>笔记管理</b> — 随题笔记 + 独立笔记，支持搜索</div></li>
+          <li><span class="pl-icon">📁</span><div><b>学习资料</b> — 浏览下载文档，PDF 在线预览</div></li>
+          <li><span class="pl-icon">🎬</span><div><b>视频课程</b> — 按科目播放，自动记录进度，断点续播</div></li>
+          <li><span class="pl-icon">🏅</span><div><b>证书中心</b> — 练习/考试证书申请与查看</div></li>
+          <li><span class="pl-icon">🔔</span><div><b>通知中心</b> — 考试提醒、批改完成、公告推送</div></li>
+        </ul>
+      </div>
+      <!-- 管理端 -->
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-icon" style="background:#fef2f2;color:#ef4444">⚙️</div><h3>管理后台功能</h3></div>
+        <div class="panel-desc">为管理员提供一站式运维管理工具</div>
+        <ul class="panel-list">
+          <li><span class="pl-icon">📊</span><div><b>工作台</b> — 平台数据总览、活跃趋势</div></li>
+          <li><span class="pl-icon">📚</span><div><b>科目章节</b> — 管理学科分类与章节结构</div></li>
+          <li><span class="pl-icon">🗂️</span><div><b>题库管理</b> — 多维筛选、手动建题、批量 Excel 导入</div></li>
+          <li><span class="pl-icon">📑</span><div><b>试卷管理</b> — 自动/手动组卷，模拟/正式考试</div></li>
+          <li><span class="pl-icon">✍️</span><div><b>人工批改</b> — 在线阅卷、快速评分、关键词匹配</div></li>
+          <li><span class="pl-icon">🔄</span><div><b>重考审批</b> — 审批学员重考申请</div></li>
+          <li><span class="pl-icon">⚠️</span><div><b>异常报告</b> — 考试异常操作记录</div></li>
+          <li><span class="pl-icon">💬</span><div><b>题目反馈</b> — 处理学员题目疑问</div></li>
+          <li><span class="pl-icon">👥</span><div><b>用户/角色管理</b> — 管理用户状态、自定义角色</div></li>
+          <li><span class="pl-icon">📈</span><div><b>数据分析 + 操作日志</b> — 多维度统计、全操作留痕</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section" id="security">
+  <div class="container">
+    <div class="section-hd"><h2>安全保障</h2><p>从账号到数据，全方位安全防护</p></div>
+    <div class="sec-grid">
+      <div class="sec-card">
+        <div class="sec-icon" style="background:#fef2f2;color:#ef4444">🔐</div>
+        <div><h4>账号安全</h4><p>密码 bcrypt 加密存储，多次登录失败自动锁定</p></div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon" style="background:#fefce8;color:#f59e0b">🛡️</div>
+        <div><h4>考试防作弊</h4><p>切屏检测、页面离开监控、超限自动交卷</p></div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon" style="background:#ecfdf5;color:#10b981">📋</div>
+        <div><h4>操作审计</h4><p>后台操作全量留痕，支持溯源与审计</p></div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon" style="background:#f0f9ff;color:#06b6d4">🔑</div>
+        <div><h4>接口安全</h4><p>JWT Token 认证，RBAC 权限控制</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="section" id="tech" style="background:var(--card);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)">
+  <div class="container">
+    <div class="section-hd"><h2>技术架构</h2><p>现代化技术栈，稳定可扩展</p></div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="ti-icon">🎨</div><h4>前端</h4><span>Vue 3 + Element Plus</span></div>
+      <div class="tech-item"><div class="ti-icon">⚡</div><h4>后端</h4><span>FastAPI + SQLAlchemy</span></div>
+      <div class="tech-item"><div class="ti-icon">🗄️</div><h4>数据库</h4><span>SQLite / PostgreSQL</span></div>
+      <div class="tech-item"><div class="ti-icon">🔑</div><h4>认证</h4><span>JWT + RBAC</span></div>
+      <div class="tech-item"><div class="ti-icon">📦</div><h4>部署</h4><span>Docker 一键部署</span></div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <p style="color:var(--txt2);font-size:14px">支持单机部署（中小规模）、分布式部署（负载均衡）、Docker 容器化一键部署</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCENES -->
+<section class="section">
+  <div class="container">
+    <div class="section-hd"><h2>适用场景</h2><p>覆盖多行业培训考试需求</p></div>
+    <div class="scene-grid">
+      <div class="scene-card"><div class="sc-icon">🏗️</div><h4>建筑检测</h4><p>材料检测、主体结构、地基基础、节能检测、室内环境</p></div>
+      <div class="scene-card"><div class="sc-icon">🎓</div><h4>职业资格</h4><p>建造师、消防工程师、安全工程师等备考</p></div>
+      <div class="scene-card"><div class="sc-icon">🏢</div><h4>企业培训</h4><p>入职培训考核、年度技能认证</p></div>
+      <div class="scene-card"><div class="sc-icon">🏫</div><h4>教育机构</h4><p>随堂测验、期中/期末考试、模拟考试</p></div>
+      <div class="scene-card"><div class="sc-icon">⚕️</div><h4>医疗卫生</h4><p>执业医师、护士资格考试练习</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>立即体验在线题库学习考试系统</h2>
+    <p>支持 PC 端和移动端访问，深色/浅色主题自由切换</p>
+    <a href="https://office-stuck-person-terminals.trycloudflare.com" class="btn btn-pri" style="font-size:17px;padding:16px 40px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      进入系统
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>在线题库学习考试系统 &copy; 2026 &nbsp;|&nbsp; 产品版本 V2.0 &nbsp;|&nbsp; <a href="https://office-stuck-person-terminals.trycloudflare.com">系统入口</a></p>
+</footer>
+
+<script>
+// Nav scroll shadow
+window.addEventListener('scroll',()=>{
+  document.getElementById('topnav').classList.toggle('scrolled',window.scrollY>10)
+})
+</script>
+</body>
+</html>
