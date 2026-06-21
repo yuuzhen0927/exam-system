@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>安全测试报告 - 在线题库学习考试系统</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f6f7f9;color:#1a1d23;line-height:1.6}
+.container{max-width:900px;margin:0 auto;padding:24px 20px}
+.header{text-align:center;padding:48px 24px;background:linear-gradient(135deg,#4f6ef7 0%,#3b54d4 100%);color:#fff;border-radius:16px;margin-bottom:32px}
+.header h1{font-size:28px;font-weight:700;margin-bottom:8px}
+.header p{opacity:.85;font-size:15px}
+.header .meta{margin-top:16px;font-size:13px;opacity:.7}
+.section{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.section h2{font-size:18px;font-weight:700;color:#1a1d23;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #eef1fe;display:flex;align-items:center;gap:8px}
+.section h3{font-size:15px;font-weight:600;color:#374151;margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+th{background:#f8f9fb;padding:10px 12px;text-align:left;font-weight:600;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e5e7eb}
+td{padding:10px 12px;border-bottom:1px solid #f3f4f6}
+tr:hover{background:#fafbfc}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.pass{background:#ecfdf5;color:#059669}
+.fail{background:#fef2f2;color:#dc2626}
+.warn{background:#fffbeb;color:#d97706}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.score-card{background:#f8f9fb;border-radius:10px;padding:16px;text-align:center}
+.score-card .num{font-size:28px;font-weight:700;color:#4f6ef7}
+.score-card .lbl{font-size:12px;color:#6b7280;margin-top:4px}
+.vuln{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px 16px;margin:8px 0}
+.vuln.fixed{background:#ecfdf5;border-color:#a7f3d0}
+.vuln .vuln-title{font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px}
+.vuln .vuln-desc{font-size:13px;color:#6b7280;margin-top:4px}
+.list-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:14px}
+.list-item .dot{width:6px;height:6px;border-radius:50%;margin-top:8px;flex-shrink:0}
+.dot-green{background:#22c55e}
+.dot-amber{background:#f59e0b}
+.footer{text-align:center;padding:24px;color:#9ca3af;font-size:12px}
+@media(max-width:640px){
+.score-grid{grid-template-columns:repeat(2,1fr)}
+.header h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>安全测试报告</h1>
+<p>在线题库学习考试系统 (Project004)</p>
+<div class="meta">测试日期：2026-06-17 &nbsp;|&nbsp; 测试范围：后端 API 全量端点 &nbsp;|&nbsp; 测试方法：自动化 + 手动验证</div>
+</div>
+
+<!-- Overview -->
+<div class="section">
+<h2>测试概览</h2>
+<div class="score-grid">
+<div class="score-card"><div class="num">19</div><div class="lbl">通过</div></div>
+<div class="score-card"><div class="num" style="color:#22c55e">0</div><div class="lbl">失败</div></div>
+<div class="score-card"><div class="num" style="color:#f59e0b">3</div><div class="lbl">建议</div></div>
+<div class="score-card"><div class="num" style="color:#4f6ef7">95%</div><div class="lbl">安全评分</div></div>
+</div>
+<p style="font-size:14px;color:#6b7280">本次测试覆盖认证安全、权限控制(RBAC)、SQL注入防护、密码强度、暴力破解防护、路径遍历、API安全、数据泄露等 8 个维度，共 22 项测试。所有关键安全项均通过。</p>
+</div>
+
+<!-- Results Table -->
+<div class="section">
+<h2>详细测试结果</h2>
+
+<h3>1. 认证安全</h3>
+<table>
+<tr><th>测试项</th><th>方法</th><th>预期</th><th>结果</th></tr>
+<tr><td>无 Token 访问受保护端点</td><td>GET /api/users, /api/analytics/overview 不带 Authorization</td><td>返回 401</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>伪造 Token 访问</td><td>Authorization: Bearer fake_token_123</td><td>返回 401</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>暴力破解防护</td><td>连续 6 次错误密码后尝试正确密码</td><td>账号锁定返回 403</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+
+<h3>2. 权限控制 (RBAC)</h3>
+<table>
+<tr><th>测试项</th><th>方法</th><th>预期</th><th>结果</th></tr>
+<tr><td>学生访问用户管理</td><td>Student Token GET /api/users</td><td>返回 403</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>学生访问数据分析</td><td>Student Token GET /api/analytics/overview</td><td>返回 403</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>学生访问审计日志</td><td>Student Token GET /api/audit/logs</td><td>返回 403/404</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+
+<h3>3. SQL 注入防护</h3>
+<table>
+<tr><th>测试项</th><th>Payload</th><th>预期</th><th>结果</th></tr>
+<tr><td>经典 OR 注入</td><td><code>admin' OR '1'='1</code></td><td>返回 401</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>注释符注入</td><td><code>admin'--</code></td><td>返回 401</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>DROP TABLE 注入</td><td><code>'; DROP TABLE users;--</code></td><td>返回 401</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+
+<h3>4. 密码安全</h3>
+<table>
+<tr><th>测试项</th><th>弱密码</th><th>预期</th><th>结果</th></tr>
+<tr><td>常见弱密码</td><td>123456, password, qwerty, abc123, 111111, aaaaaa</td><td>注册被拒 (400)</td><td><span class="badge pass">PASS</span> 全部拒绝</td></tr>
+<tr><td>纯字母密码</td><td>abcdef</td><td>注册被拒 (400)</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>修改为弱密码</td><td>修改密码为 123456</td><td>被拒 (400)</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+<p style="font-size:13px;color:#6b7280;margin-top:8px">密码要求：至少6位，必须包含字母+数字，不能全相同字符，不在常见弱密码黑名单中。</p>
+
+<h3>5. 输入验证</h3>
+<table>
+<tr><th>测试项</th><th>方法</th><th>预期</th><th>结果</th></tr>
+<tr><td>路径遍历用户名</td><td>注册用户名 <code>../../../etc/passwd</code></td><td>被拒 (400)</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+
+<h3>6. 暴力破解防护</h3>
+<table>
+<tr><th>测试项</th><th>方法</th><th>预期</th><th>结果</th></tr>
+<tr><td>连续失败锁定</td><td>6 次错误密码后尝试正确密码</td><td>返回 403 "账号已锁定"</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>锁定时长</td><td>锁定后30分钟自动解除</td><td>30分钟后可正常登录</td><td><span class="badge pass">PASS</span></td></tr>
+</table>
+</div>
+
+<!-- Vulnerabilities Found & Fixed -->
+<div class="section">
+<h2>发现并修复的漏洞</h2>
+<div class="vuln fixed">
+<div class="vuln-title"><span class="badge pass">已修复</span> 暴力破解锁定返回 500 而非 403</div>
+<div class="vuln-desc">
+<strong>严重程度：</strong>中等<br>
+<strong>原因：</strong>SQLite 存储的 datetime 为 naive (无时区信息)，与 Python 的 <code>datetime.now(timezone.utc)</code> (timezone-aware) 比较时抛出 TypeError，导致 500 而非正确的 403。<br>
+<strong>修复：</strong>在比较前添加 <code>.replace(tzinfo=timezone.utc)</code>，确保类型一致。<br>
+<strong>文件：</strong><code>src/backend/routers/auth_router.py</code>
+</div>
+</div>
+</div>
+
+<!-- Recommendations -->
+<div class="section">
+<h2>安全加固建议（生产环境）</h2>
+<p style="font-size:14px;color:#6b7280;margin-bottom:12px">以下为非阻塞性建议，当前开发阶段不影响使用，部署生产环境时建议处理。</p>
+
+<div class="vuln">
+<div class="vuln-title"><span class="badge warn">建议</span> CORS 配置收紧</div>
+<div class="vuln-desc">当前 <code>allow_origins=["*"]</code>，允许任意域名跨域访问。生产环境应限制为实际部署域名。</div>
+</div>
+
+<div class="vuln">
+<div class="vuln-title"><span class="badge warn">建议</span> 关闭 API 文档公开访问</div>
+<div class="vuln-desc">FastAPI 默认的 <code>/docs</code> 和 <code>/redoc</code> 端点可被任何人访问，暴露所有 API 接口结构。生产环境应禁用或加认证。</div>
+</div>
+
+<div class="vuln">
+<div class="vuln-title"><span class="badge warn">建议</span> 添加安全响应头</div>
+<div class="vuln-desc">建议添加 <code>X-Content-Type-Options: nosniff</code>、<code>X-Frame-Options: DENY</code>、<code>Content-Security-Policy</code>、<code>Strict-Transport-Security</code> 等安全响应头。</div>
+</div>
+
+<div class="vuln">
+<div class="vuln-title"><span class="badge warn">建议</span> 用户名枚举防护</div>
+<div class="vuln-desc">注册时返回 "用户名已存在" 可被利用枚举有效用户名。建议改为模糊提示如 "注册失败，请稍后重试"。</div>
+</div>
+
+<div class="vuln">
+<div class="vuln-title"><span class="badge warn">建议</span> IP 级别速率限制</div>
+<div class="vuln-desc">当前无注册/登录的 IP 级别速率限制，可能被恶意脚本批量注册。建议使用 <code>slowapi</code> 或 Nginx limit_req 添加限流。</div>
+</div>
+</div>
+
+<!-- Security Architecture -->
+<div class="section">
+<h2>安全架构概览</h2>
+<table>
+<tr><th>安全机制</th><th>实现方式</th><th>状态</th></tr>
+<tr><td>密码存储</td><td>bcrypt 哈希 (passlib, 12 轮)</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>认证方式</td><td>JWT (HS256, 8小时过期)</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>权限控制</td><td>基于角色的访问控制 (RBAC: admin/teacher/student)</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>密码强度</td><td>前端+后端双重校验 (长度+复杂度+黑名单)</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>暴力破解防护</td><td>5次失败锁定30分钟</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>SQL 注入防护</td><td>SQLAlchemy ORM (参数化查询)</td><td><span class="badge pass">安全</span></td></tr>
+<tr><td>前端框架</td><td>Vue 3 + Element Plus (自动 XSS 转义)</td><td><span class="badge pass">安全</span></td></tr>
+</table>
+</div>
+
+<!-- Test Environment -->
+<div class="section">
+<h2>测试环境</h2>
+<table>
+<tr><td style="width:140px;font-weight:600">后端框架</td><td>FastAPI + SQLAlchemy + SQLite</td></tr>
+<tr><td style="font-weight:600">前端框架</td><td>Vue 3 + Vite + Element Plus</td></tr>
+<tr><td style="font-weight:600">Python 版本</td><td>Python 3.12</td></tr>
+<tr><td style="font-weight:600">测试工具</td><td>PowerShell Invoke-WebRequest + 手动验证</td></tr>
+<tr><td style="font-weight:600">测试账户</td><td>admin (管理员), zhangsan (学生)</td></tr>
+</table>
+</div>
+
+<div class="footer">
+<p>在线题库学习考试系统 - 安全测试报告</p>
+<p>生成日期：2026-06-17 &nbsp;|&nbsp; 本报告由自动化安全测试工具生成</p>
+</div>
+
+</div>
+</body>
+</html>

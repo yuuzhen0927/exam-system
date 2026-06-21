@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: exam-backend
+    volumes:
+      - ./src/backend/uploads:/app/backend/uploads
+      - ./src/backend/exam.db:/app/backend/exam.db
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: exam-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/frontend/dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考试系统 - 使用说明</title>
+<style>
+:root {
+  --primary: #4F6EF7; --primary-light: #EEF1FE; --primary-dark: #3B54D4;
+  --accent: #10B981; --accent-light: #D1FAE5;
+  --bg: #F8F9FB; --bg-card: #FFFFFF; --bg-sidebar: #F0F1F5;
+  --text: #1F2937; --text-secondary: #6B7280; --text-muted: #9CA3AF;
+  --border: #E5E7EB; --border-light: #F3F4F6;
+  --success: #10B981; --warning: #F59E0B; --danger: #EF4444; --info: #3B82F6;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+  --radius: 12px; --radius-sm: 8px;
+}
+[data-theme="dark"] {
+  --primary: #818CF8; --primary-light: #1E1B4B; --primary-dark: #A5B4FC;
+  --bg: #111827; --bg-card: #1F2937; --bg-sidebar: #0F172A;
+  --text: #F3F4F6; --text-secondary: #9CA3AF; --text-muted: #6B7280;
+  --border: #374151; --border-light: #1F2937;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3); --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; transition: background 0.3s, color 0.3s; }
+.header { background: linear-gradient(135deg, var(--primary) 0%, #6366F1 50%, #8B5CF6 100%); color: #fff; padding: 52px 24px 40px; text-align: center; position: relative; overflow: hidden; }
+.header::after { content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 40px; background: var(--bg); border-radius: 40px 40px 0 0; }
+.header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 8px; position: relative; z-index: 1; }
+.header p { font-size: 1rem; opacity: 0.88; position: relative; z-index: 1; }
+.theme-toggle { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.18); border: none; color: #fff; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(8px); transition: background 0.2s; z-index: 10; }
+.theme-toggle:hover { background: rgba(255,255,255,0.3); }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; min-height: 100vh; }
+.sidebar { width: 260px; flex-shrink: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 20px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; transition: background 0.3s, border 0.3s; }
+.sidebar-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); padding: 0 20px 12px; }
+.sidebar a { display: flex; align-items: center; gap: 10px; padding: 9px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; border-left: 3px solid transparent; }
+.sidebar a:hover { background: rgba(79,110,247,0.08); color: var(--primary); }
+.sidebar a.active { background: rgba(79,110,247,0.12); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.main { flex: 1; padding: 32px 40px 80px; min-width: 0; }
+.section { margin-bottom: 52px; scroll-margin-top: 24px; }
+.section-title { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.section-title .num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--primary); color: #fff; border-radius: 50%; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+h3 { font-size: 1.15rem; font-weight: 600; margin: 24px 0 12px; color: var(--text); }
+h4 { font-size: 1rem; font-weight: 600; margin: 18px 0 8px; color: var(--text-secondary); }
+p { margin-bottom: 12px; color: var(--text-secondary); }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow); transition: box-shadow 0.2s, background 0.3s; }
+.card:hover { box-shadow: var(--shadow-lg); }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+.card-mini { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+.card-mini:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.card-mini .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.card-mini .label { font-size: 0.85rem; color: var(--text-secondary); }
+.card-mini .value { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 16px 0; }
+.feature-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: box-shadow 0.2s; }
+.feature-item:hover { box-shadow: var(--shadow-lg); }
+.feature-item .fi-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+.feature-item .fi-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+.feature-item .fi-text span { font-size: 0.82rem; color: var(--text-secondary); }
+table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 0.9rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+th { background: var(--primary-light); color: var(--primary); font-weight: 600; padding: 10px 14px; text-align: left; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); color: var(--text-secondary); }
+tr:last-child td { border-bottom: none; }
+.tag { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 0.78rem; font-weight: 600; margin-right: 4px; }
+.tag-success { background: var(--accent-light); color: var(--success); }
+.tag-warning { background: #FEF3C7; color: #D97706; }
+.tag-danger { background: #FEE2E2; color: #DC2626; }
+.tag-info { background: #DBEAFE; color: #2563EB; }
+code { background: var(--bg-sidebar); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-family: "SF Mono", "Fira Code", "Consolas", monospace; }
+.highlight { background: linear-gradient(120deg, var(--primary-light) 0%, transparent 100%); padding: 2px 8px; border-radius: 4px; font-weight: 600; color: var(--primary); }
+.tip { border-left: 4px solid var(--primary); background: var(--primary-light); padding: 12px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 16px 0; font-size: 0.9rem; color: var(--primary-dark); }
+footer { text-align: center; padding: 32px 24px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+ul, ol { margin: 8px 0 16px 20px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 0; }
+  .sidebar a { padding: 8px 16px; font-size: 0.82rem; }
+  .main { padding: 20px 16px 60px; }
+  .header h1 { font-size: 1.5rem; }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <button class="theme-toggle" onclick="toggleTheme()" title="切换暗色模式">🌙</button>
+  <h1>📚 考试系统</h1>
+  <p>在线考试与学习管理平台 · 使用说明 v2.0</p>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="sidebar-title">📍 目录导航</div>
+  <a href="#intro">📖 系统简介</a>
+  <a href="#env">🌐 环境与访问</a>
+  <a href="#accounts">👤 账号说明</a>
+  <a href="#login">🔐 登录</a>
+  <a href="#dashboard">📊 工作台</a>
+  <div class="sidebar-title" style="margin-top:12px">🎓 学员功能</div>
+  <a href="#practice">✏️ 练习中心</a>
+  <a href="#exams">📝 模拟考试</a>
+  <a href="#results">🏆 我的成绩</a>
+  <a href="#practice-records">📜 练习记录</a>
+  <a href="#wrongbook">📕 错题本</a>
+  <a href="#favorites">⭐ 收藏夹</a>
+  <a href="#notes">📓 笔记管理</a>
+  <a href="#resources">📂 学习资料</a>
+  <a href="#videos">🎬 视频课程</a>
+  <a href="#certificates">🏅 证书中心</a>
+  <div class="sidebar-title" style="margin-top:12px">🛡️ 管理功能</div>
+  <a href="#admin-subjects">📂 科目管理</a>
+  <a href="#admin-questions">📝 题库管理</a>
+  <a href="#admin-import">📥 题目导入</a>
+  <a href="#admin-exams">📊 试卷管理</a>
+  <a href="#admin-grade">✍️ 人工批改</a>
+  <a href="#admin-announce">📢 公告管理</a>
+  <a href="#admin-analytics">📈 数据分析</a>
+  <a href="#admin-users">👥 用户管理</a>
+  <a href="#admin-abnormal">⚠️ 异常报告</a>
+  <a href="#admin-feedback">📩 题目反馈</a>
+  <a href="#admin-audit">🔍 操作日志</a>
+  <a href="#faq" style="margin-top:12px">❓ 常见问题</a>
+</aside>
+<main class="main">
+
+<section class="section" id="intro">
+  <div class="section-title"><span class="num">1</span>系统简介</div>
+  <p>考试系统是一套一体化在线题库学习平台，整合在线练习、模拟/正式考试、视频课程、学习资料、证书管理等核心能力。系统分为<span class="highlight">学员端</span>和<span class="highlight">管理后台</span>两大模块，支持单选、多选、判断、综合简答等题型，具备题库批量导入、智能组卷、自动判分、人工批改、数据统计、异常监控等管理功能。</p>
+  <h4>✨ 主要特性</h4>
+  <div class="feature-grid">
+    <div class="feature-item"><div class="fi-icon">🎯</div><div class="fi-text"><strong>多模式练习</strong><span>随机 / 专项 / 章节 / 背题</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📝</div><div class="fi-text"><strong>正式考试</strong><span>限时 · 防作弊 · 自动判分</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🧠</div><div class="fi-text"><strong>智能组卷</strong><span>按科目/章节/难度自动抽题</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📥</div><div class="fi-text"><strong>Excel批量导入</strong><span>下载模板 · 一键导入 · 错误提示</span></div></div>
+    <div class="feature-item"><div class="fi-icon">✍️</div><div class="fi-text"><strong>人工批改</strong><span>综合题在线批阅、逐题打分</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📊</div><div class="fi-text"><strong>数据分析</strong><span>用户维度 + 整体维度统计</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🎬</div><div class="fi-text"><strong>视频课程</strong><span>科目分类 · 断点续播</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🏅</div><div class="fi-text"><strong>证书系统</strong><span>自动颁发 · 撤销管理</span></div></div>
+    <div class="feature-item"><div class="fi-icon">⚠️</div><div class="fi-text"><strong>异常监控</strong><span>切屏记录 · 作弊判定</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🔐</div><div class="fi-text"><strong>安全保护</strong><span>登录锁定 · 全操作审计日志</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📱</div><div class="fi-text"><strong>移动适配</strong><span>手机端全页面自适应布局</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🌙</div><div class="fi-text"><strong>暗色模式</strong><span>一键切换主题</span></div></div>
+  </div>
+</section>
+
+
+<!-- ====== Env ====== -->
+<section class="section" id="env">
+  <div class="section-title"><span class="num">2</span>&#29615;&#22659;&#19982;&#35775;&#38382;</div>
+  <table><tr><th>&#39033;&#30446;</th><th>&#22320;&#22336;</th></tr>
+    <tr><td>&#21069;&#31471;&#65288;&#24320;&#21457;&#65289;</td><td><code>http://localhost:5173</code></td></tr>
+    <tr><td>&#21518;&#31471; API</td><td><code>http://localhost:8002</code></td></tr>
+    <tr><td>API &#25991;&#26723; (Swagger)</td><td><code>http://localhost:8002/docs</code></td></tr>
+  </table>
+  <p>&#25903;&#25345;&#20027;&#27969;&#27983;&#35272;&#22120;&#65288;Chrome&#12289;Edge&#12289;Firefox&#12289;Safari&#65289;&#65292;&#21516;&#26102;&#36866;&#37197;&#25163;&#26426;&#31471;&#27983;&#35272;&#22120;&#21644;&#24494;&#20449;&#20869;&#32622;&#27983;&#35272;&#22120;&#12290;</p>
+</section>
+
+<!-- ====== Accounts ====== -->
+<section class="section" id="accounts">
+  <div class="section-title"><span class="num">3</span>&#36134;&#21495;&#35828;&#26126;</div>
+  <table><tr><th>&#35282;&#33394;</th><th>&#29992;&#25143;&#21517;</th><th>&#23494;&#30721;</th><th>&#35828;&#26126;</th></tr>
+    <tr><td>&#31649;&#29702;&#21592;</td><td><code>admin</code></td><td><code>admin123</code></td><td>&#20840;&#37096;&#21151;&#33021;&#65292;&#21547;&#31649;&#29702;&#21518;&#21488;</td></tr>
+    <tr><td>&#25945;&#24072;</td><td>&#21487;&#36890;&#36807;&#21518;&#21488;&#21019;&#24314;</td><td>---</td><td>&#39064;&#24211; + &#35797;&#21367; + &#25209;&#25913;&#26435;&#38480;</td></tr>
+    <tr><td>&#23398;&#21592;</td><td>&#21487;&#36890;&#36807;&#21518;&#21488;&#21019;&#24314;</td><td>---</td><td>&#20165;&#23398;&#21592;&#21151;&#33021;</td></tr>
+  </table>
+  <p>&#31995;&#32479;&#25903;&#25345;&#19977;&#32423;&#35282;&#33394;&#65306;<span class="tag tag-info">&#31649;&#29702;&#21592;</span><span class="tag tag-warning">&#25945;&#24072;</span><span class="tag tag-success">&#23398;&#21592;</span>&#12290;</p>
+</section>
+
+<!-- ====== Login ====== -->
+<section class="section" id="login">
+  <div class="section-title"><span class="num">4</span>&#30331;&#24405;</div>
+  <p>&#25171;&#24320;&#31995;&#32479;&#39318;&#39029;&#65292;&#33258;&#21160;&#36339;&#36716;&#33267;&#30331;&#24405;&#39029;&#12290;&#36755;&#20837;&#29992;&#25143;&#21517;&#21644;&#23494;&#30721;&#65292;&#28857;&#20987;&#12300;&#30331;&#24405;&#12301;&#25353;&#38062;&#21363;&#21487;&#36827;&#20837;&#31995;&#32479;&#12290;</p>
+  <div class="tip"><strong>&#128274; &#23433;&#20840;&#20445;&#25252;&#65306;</strong>&#23494;&#30721;&#36830;&#32493;&#36755;&#38169; <strong>5 &#27425;</strong> &#21518;&#36134;&#21495;&#23558;&#34987;&#20020;&#26102;&#38145;&#23450; <strong>30 &#20998;&#38047;</strong>&#65292;&#26377;&#25928;&#38450;&#27490;&#26292;&#21147;&#30772;&#35299;&#12290;&#21518;&#21488;&#25152;&#26377;&#25805;&#20316;&#33258;&#21160;&#30041;&#30165;&#65292;&#35760;&#24405;&#25805;&#20316;&#20154;&#12289;&#25805;&#20316;&#26102;&#38388;&#12289;&#25805;&#20316;&#20869;&#23481;&#12290;</div>
+</section>
+
+<!-- ====== Dashboard ====== -->
+<section class="section" id="dashboard">
+  <div class="section-title"><span class="num">5</span>&#24037;&#20316;&#21488;</div>
+  <p>&#30331;&#24405;&#21518;&#40664;&#35748;&#36827;&#20837;&#24037;&#20316;&#21488;&#65292;&#36825;&#26159;&#20320;&#30340;&#23398;&#20064;&#24635;&#35272;&#39029;&#38754;&#12290;</p>
+  <div class="card-grid">
+    <div class="card-mini"><div class="icon">&#128221;</div><div class="value">&#24635;&#20570;&#39064;&#37327;</div><div class="label">&#32047;&#35745;&#32451;&#20064;&#39064;&#25968;</div></div>
+    <div class="card-mini"><div class="icon">&#9989;</div><div class="value">&#27491;&#30830;&#29575;</div><div class="label">&#24179;&#22343;&#27491;&#30830;&#29575;</div></div>
+    <div class="card-mini"><div class="icon">&#9888;&#65039;</div><div class="value">&#38169;&#39064;&#25968;</div><div class="label">&#32047;&#35745;&#38169;&#35823;&#39064;&#25968;</div></div>
+    <div class="card-mini"><div class="icon">&#127942;</div><div class="value">&#32771;&#35797;&#27425;&#25968;</div><div class="label">&#24050;&#21442;&#21152;&#32771;&#35797;</div></div>
+  </div>
+  <h4>&#128200; &#23398;&#20064;&#27963;&#36291;&#24230;&#28909;&#21147;&#22270;</h4>
+  <p>&#23637;&#31034;&#36817; 30 &#22825;&#30340;&#32451;&#20064;&#27963;&#36291;&#24230;&#65292;&#39068;&#33394;&#36234;&#28145;&#34920;&#31034;&#24403;&#22825;&#20570;&#39064;&#36234;&#22810;&#12290;</p>
+  <h4>&#128226; &#31995;&#32479;&#20844;&#21578;</h4>
+  <p>&#24037;&#20316;&#21488;&#21491;&#20391;&#23637;&#31034;&#26368;&#26032;&#31995;&#32479;&#20844;&#21578;&#65292;&#32622;&#39030;&#20844;&#21578;&#20250;&#31361;&#20986;&#26174;&#31034;&#12290;</p>
+  <h4>&#128202; &#31649;&#29702;&#21592;&#38754;&#26495;</h4>
+  <p>&#31649;&#29702;&#21592;&#30331;&#24405;&#21518;&#36824;&#21487;&#30475;&#21040;&#31995;&#32479;&#27010;&#20917;&#65306;&#24635;&#29992;&#25143;&#25968;&#12289;&#39064;&#24211;&#24635;&#37327;&#12289;&#24453;&#22788;&#29702;&#21453;&#39304;&#12289;&#24322;&#24120;&#25253;&#21578;&#31561;&#20851;&#38190;&#25351;&#26631;&#12290;</p>
+  <h4>&#128203; &#26368;&#36817;&#32771;&#35797;</h4>
+  <p>&#24037;&#20316;&#21488;&#19979;&#26041;&#23637;&#31034;&#26368;&#36817;&#30340;&#32771;&#35797;&#35760;&#24405;&#65292;&#21253;&#21547;&#24471;&#20998;&#12289;&#36890;&#36807;&#29366;&#24577;&#65292;&#19968;&#38190;&#36339;&#36716;&#26597;&#30475;&#35814;&#24773;&#12290;</p>
+</section>
+
+<!-- ====== Practice ====== -->
+<section class="section" id="practice">
+  <div class="section-title"><span class="num">6</span>练习中心</div>
+  <p>从左侧菜单点击「练习中心」进入。支持四种刷题模式和丰富的题目筛选条件。</p>
+  <h4>🎯 四种练习模式</h4>
+  <div class="feature-grid">
+    <div class="feature-item"><div class="fi-icon">🎲</div><div class="fi-text"><strong>随机练习</strong><span>从题库中随机抽取题目，每题即时反馈，适合日常刷题保持手感</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📂</div><div class="fi-text"><strong>专项练习</strong><span>按科目、章节、题型、难度筛选题目，针对性突破薄弱知识点</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📖</div><div class="fi-text"><strong>背题模式</strong><span>直接查看答案和解析，无需作答，适合考前突击记忆</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🔄</div><div class="fi-text"><strong>错题重做</strong><span>从错题本选择错题直接开始练习，反复巩固</span></div></div>
+  </div>
+  <h4>⚙️ 练习配置</h4>
+  <table><tr><th>配置项</th><th>说明</th></tr>
+    <tr><td>模式</td><td>随机 / 专项 / 章节 / 背题</td></tr>
+    <tr><td>科目</td><td>选择特定科目或全部</td></tr>
+    <tr><td>章节</td><td>选择特定章节或全部（选科目后可选）</td></tr>
+    <tr><td>题型</td><td>单选 / 多选 / 判断 / 全部</td></tr>
+    <tr><td>题数</td><td>5 到 100 题</td></tr>
+  </table>
+  <h4>📝 练习中操作</h4>
+  <ul>
+    <li>顶部显示进度条和当前题号</li>
+    <li>点击选项后即时显示正确答案和解析</li>
+    <li>支持<span class="highlight">收藏题目</span>和<span class="highlight">添加笔记</span></li>
+    <li>支持<span class="highlight">题目反馈</span>，对有疑问的题目可直接提交反馈</li>
+    <li>答错的题目自动加入错题本</li>
+  </ul>
+</section>
+
+<!-- ====== Exams ====== -->
+<section class="section" id="exams">
+  <div class="section-title"><span class="num">7</span>模拟考试</div>
+  <p>从左侧菜单点击「模拟考试」进入。页面展示所有可用试卷，包含试卷标题、描述、题量、时长、满分、发布状态。</p>
+  <h4>🚀 开始考试</h4>
+  <ol>
+    <li>选择试卷，点击进入考试</li>
+    <li>顶部显示<span class="highlight">倒计时</span>，剩余 5 分钟时计时器变红警告</li>
+    <li>逐题作答或通过右侧「<span class="highlight">答题卡</span>」快速跳转</li>
+    <li>时间到自动交卷，也可手动提前交卷</li>
+  </ol>
+  <h4>🛡️ 考试规则</h4>
+  <div class="feature-grid">
+    <div class="feature-item"><div class="fi-icon">⏱️</div><div class="fi-text"><strong>倒计时</strong><span>剩余不足 5 分钟时计时器红色闪烁警告</span></div></div>
+    <div class="feature-item"><div class="fi-icon">🚫</div><div class="fi-text"><strong>防作弊</strong><span>切屏/切换标签页会记录异常，超过限制强制交卷</span></div></div>
+    <div class="feature-item"><div class="fi-icon">✅</div><div class="fi-text"><strong>确认交卷</strong><span>点击交卷后需二次确认，防止误操作</span></div></div>
+    <div class="feature-item"><div class="fi-icon">📋</div><div class="fi-text"><strong>答题卡</strong><span>右侧导航面板显示已答/未答状态</span></div></div>
+  </div>
+  <h4>📊 考试结果</h4>
+  <p>单选/多选/判断题<span class="highlight">交卷后立即出分</span>；含综合简答题的试卷需等待管理员人工批改后出分。</p>
+</section>
+
+<!-- ====== Results ====== -->
+<section class="section" id="results">
+  <div class="section-title"><span class="num">8</span>我的成绩</div>
+  <p>展示个人全部考试记录，包含试卷名称、得分、作答时长、提交时间、考试结果。</p>
+  <ul>
+    <li>点击「<span class="highlight">回看</span>」可查看试卷、每题答案及解析</li>
+    <li>正确题目绿色标记，错误题目红色标记</li>
+    <li>支持查看自动评分和人工评分明细</li>
+  </ul>
+</section>
+
+<!-- ====== Practice Records ====== -->
+<section class="section" id="practice-records">
+  <div class="section-title"><span class="num">9</span>练习记录</div>
+  <p>记录所有刷题行为，展示练习科目、题目数量、正确率、练习时间。</p>
+  <ul>
+    <li>正确率 <strong>≥80%</strong> 绿色，<strong>60-79%</strong> 橙色，<strong>&lt;60%</strong> 红色直观展示</li>
+    <li>支持<span class="highlight">一键重做错题</span>，直接从记录跳转到错题重做模式</li>
+  </ul>
+</section>
+
+<!-- ====== WrongBook ====== -->
+<section class="section" id="wrongbook">
+  <div class="section-title"><span class="num">10</span>错题本</div>
+  <p>练习和考试中答错的题目自动收集到此处。</p>
+  <ul>
+    <li>按科目、章节分类展示</li>
+    <li>每道错题显示错误次数和最近一次错误时间</li>
+    <li>支持<span class="highlight">多选批量重做</span>，一次性重做多道错题</li>
+    <li>支持移除错题标记（已掌握）</li>
+  </ul>
+</section>
+
+<!-- ====== Favorites ====== -->
+<section class="section" id="favorites">
+  <div class="section-title"><span class="num">11</span>收藏夹</div>
+  <p>练习和考试过程中可以收藏任意题目，收藏列表支持分类查看、重新做题、取消收藏。</p>
+</section>
+
+<!-- ====== Notes ====== -->
+<section class="section" id="notes">
+  <div class="section-title"><span class="num">12</span>笔记管理</div>
+  <p>在练习或考试过程中可以对任意题目添加笔记。笔记管理页面提供独立的笔记查看入口：</p>
+  <ul>
+    <li>按题目关联展示所有笔记</li>
+    <li>支持<span class="highlight">关键词搜索</span>笔记内容</li>
+    <li>支持编辑、删除笔记</li>
+    <li>显示更新时间，便于回顾</li>
+  </ul>
+</section>
+
+<!-- ====== Resources ====== -->
+<section class="section" id="resources">
+  <div class="section-title"><span class="num">13</span>学习资料</div>
+  <p>浏览、预览、下载管理员上传的各类学习文件。支持按科目筛选、关键词搜索资料。</p>
+  <p>支持格式：PDF、Word、图片、压缩包。文件大小限制 50MB。</p>
+</section>
+
+<!-- ====== Videos ====== -->
+<section class="section" id="videos">
+  <div class="section-title"><span class="num">14</span>视频课程</div>
+  <p>按科目分类播放视频课程，自动记录播放进度，支持<span class="highlight">断点续播</span>。可查看课程列表、课程简介。</p>
+</section>
+
+<!-- ====== Certificates ====== -->
+<section class="section" id="certificates">
+  <div class="section-title"><span class="num">15</span>证书中心</div>
+  <p>查看本人已颁发证书，展示证书编号、颁发时间、所属科目。证书被撤销时页面会标注状态提醒。</p>
+</section>
+
+<!-- ====== Admin: Subjects ====== -->
+<section class="section" id="admin-subjects">
+  <div class="section-title"><span class="num">16</span>科目管理</div>
+  <p>管理员/负责人可新增、编辑、删除学科分类。为对应科目搭建、维护<span class="highlight">章节结构</span>，作为题库、试卷、资料的分类载体。</p>
+</section>
+
+<!-- ====== Admin: Questions ====== -->
+<section class="section" id="admin-questions">
+  <div class="section-title"><span class="num">17</span>题库管理</div>
+  <p>按科目、章节、题型、难度、关键词筛选全平台题目。</p>
+  <ul>
+    <li>手动新建单题，支持录入题干、选项、答案、解析、上传题目配图</li>
+    <li>支持编辑、软删除已有题目</li>
+    <li>兼容题型：<span class="tag tag-info">单选</span><span class="tag tag-warning">多选</span><span class="tag tag-success">判断</span><span class="tag tag-danger">综合</span></li>
+    <li>每次编辑自动保存<span class="highlight">版本历史</span>，可查看历史版本</li>
+  </ul>
+</section>
+
+<!-- ====== Admin: Import ====== -->
+<section class="section" id="admin-import">
+  <div class="section-title"><span class="num">18</span>题目导入</div>
+  <p>提供<span class="highlight">标准 Excel 导入模板</span>，管理员下载模板按规范批量录入题目。</p>
+  <ul>
+    <li>上传文件自动校验格式与大小，格式错误弹出明确提示</li>
+    <li>导入失败时展示错误行号与原因，便于修正文件</li>
+    <li>自动创建不存在的科目和章节</li>
+    <li>支持格式：.xls、.xlsx，文件大小限制 10MB</li>
+  </ul>
+  <p>模板包含列：科目 | 章节 | 题型 | 难度(1-5) | 题干 | 选项(JSON) | 答案 | 解析 | 规范引用</p>
+</section>
+
+<!-- ====== Admin: Exams ====== -->
+<section class="section" id="admin-exams">
+  <div class="section-title"><span class="num">19</span>试卷管理</div>
+  <p>支持新建、编辑、删除试卷，区分模拟考试、正式考试两种类型。</p>
+  <h4>⚙️ 两种组卷方式</h4>
+  <div class="feature-grid">
+    <div class="feature-item"><div class="fi-icon">🧠</div><div class="fi-text"><strong>智能组卷</strong><span>设置科目、章节、题型数量、难度范围，系统自动随机抽题组卷</span></div></div>
+    <div class="feature-item"><div class="fi-icon">✍️</div><div class="fi-text"><strong>手动组卷</strong><span>从题库中挑选指定题目组成试卷</span></div></div>
+  </div>
+  <h4>⚙️ 试卷设置</h4>
+  <table><tr><th>设置项</th><th>说明</th></tr>
+    <tr><td>考试时长</td><td>设置考试倒计时时长（分钟）</td></tr>
+    <tr><td>试卷总分</td><td>设置满分值</td></tr>
+    <tr><td>及格分</td><td>设置及格分数线</td></tr>
+    <tr><td>随机顺序</td><td>题目顺序随机 / 选项乱序</td></tr>
+    <tr><td>切屏限制</td><td>设置最大切屏次数</td></tr>
+    <tr><td>发布状态</td><td>控制试卷启用/禁用</td></tr>
+  </table>
+</section>
+
+<!-- ====== Admin: Manual Grade ====== -->
+<section class="section" id="admin-grade">
+  <div class="section-title"><span class="num">20</span>人工批改</div>
+  <p>统一纳入含综合简答题的待批改试卷，管理员在线批阅、打分。</p>
+  <ul>
+    <li>待批改列表展示考试名称、学员、自动评分、提交时间</li>
+    <li>进入批改后并排展示<span class="highlight">学生答案</span>和<span class="highlight">参考答案</span></li>
+    <li>每题独立设分，自动汇总自动评分 + 人工评分</li>
+    <li>批改完成后成绩自动同步至学员端</li>
+  </ul>
+</section>
+
+<!-- ====== Admin: Announce ====== -->
+<section class="section" id="admin-announce">
+  <div class="section-title"><span class="num">21</span>公告管理</div>
+  <p>支持新增、编辑、删除系统公告，可设置公告置顶。公告面向全体学员展示，用于发布通知、考试安排等内容。</p>
+</section>
+
+<!-- ====== Admin: Analytics ====== -->
+<section class="section" id="admin-analytics">
+  <div class="section-title"><span class="num">22</span>数据分析</div>
+  <p>统计平台整体数据和用户个人数据：</p>
+  <ul>
+    <li><strong>整体数据</strong>：总用户、活跃用户、题库总量、考试整体数据</li>
+    <li><strong>用户数据</strong>：全体学员练习量、答题正确率、考试通过率</li>
+  </ul>
+</section>
+
+<!-- ====== Admin: Users ====== -->
+<section class="section" id="admin-users">
+  <div class="section-title"><span class="num">23</span>用户管理</div>
+  <p>查看全体注册用户列表，管理账号状态；可查看单个用户的学习、考试明细数据。</p>
+</section>
+
+<!-- ====== Admin: Abnormal ====== -->
+<section class="section" id="admin-abnormal">
+  <div class="section-title"><span class="num">24</span>异常报告</div>
+  <p>汇总正式考试中用户切屏、频繁切换页面等异常操作记录，管理员可查看明细并判定考试有效性。</p>
+</section>
+
+<!-- ====== Admin: Feedback ====== -->
+<section class="section" id="admin-feedback">
+  <div class="section-title"><span class="num">25</span>题目反馈</div>
+  <p>接收学员提交的题目错误、疑问等反馈，管理员处理问题、修正题目并跟进反馈进度。</p>
+</section>
+
+<!-- ====== Admin: Audit ====== -->
+<section class="section" id="admin-audit">
+  <div class="section-title"><span class="num">26</span>操作日志</div>
+  <p>后台所有操作自动留痕，记录操作人、操作时间、操作内容，用于问题溯源。</p>
+</section>
+
+<!-- ====== FAQ ====== -->
+<section class="section" id="faq">
+  <div class="section-title"><span class="num">27</span>常见问题</div>
+  <div class="card"><h4>如何快速建立题库？</h4><p>进入后台 → 题库管理 → 下载 Excel 模板 → 按模板格式填写题目 → 上传导入。系统会自动校验并提示错误行。</p></div>
+  <div class="card"><h4>如何组建一份试卷？</h4><p>进入后台 → 试卷管理 → 智能组卷，设置科目、题型数量、难度，系统自动抽题生成。也可手动挑选题目。</p></div>
+  <div class="card"><h4>综合题如何批改？</h4><p>进入后台 → 人工批改，查看待批改列表，点击进入批改界面，对每道综合题独立打分，提交后成绩自动同步。</p></div>
+  <div class="card"><h4>忘记密码怎么办？</h4><p>请联系系统管理员重置密码。连续 5 次输错密码会触发账号锁定 30 分钟。</p></div>
+  <div class="card"><h4>切屏多少次会被判作弊？</h4><p>默认切屏 3 次即被判定为作弊，强制交卷。具体限制次数可在试卷设置中调整。</p></div>
+</section>
+
+
+</main>
+</div>
+<footer><p>考试系统 v2.0 · 产品文档 · 2026-06-15</p></footer>
+<script>
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+function toggleTheme() {
+  var el = document.documentElement;
+  var isDark = el.getAttribute('data-theme') === 'dark';
+  el.setAttribute('data-theme', isDark ? '' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+var links = document.querySelectorAll('.sidebar a');
+var sections = document.querySelectorAll('.section');
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY + 100;
+  sections.forEach(function(sec) {
+    if (sec.offsetTop <= scrollY && sec.offsetTop + sec.offsetHeight > scrollY) {
+      links.forEach(function(l) { l.classList.remove('active'); });
+      var link = document.querySelector('.sidebar a[href="#' + sec.getAttribute('id') + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+});
+links.forEach(function(l) {
+  l.addEventListener('click', function() { links.forEach(function(x) { x.classList.remove('active'); }); l.classList.add('active'); });
+});
+</script>
+</body>
+</html>
